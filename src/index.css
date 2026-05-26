@@ -1,0 +1,32 @@
+:root {
+  --paper: #0a0e13;
+  --paper-alt: #111820;
+  --ink: #e6edf3;
+  --ink-dim: #7d8590;
+  --ink-faint: #2d333b;
+  --rule: #1c232d;
+  --process-fill: #111820;
+  --process-stroke: #e6edf3;
+  --resource-fill: #111820;
+  --resource-stroke: #e6edf3;
+  --assign-color: #3fb950;
+  --request-color: #f85149;
+  --deadlock-color: #f85149;
+  --ok-color: #3fb950;
+  --accent: #58a6ff;
+  --selected-glow: #58a6ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Archivo', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}

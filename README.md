@@ -33,6 +33,8 @@ wait-for graph from requests and assignments, then runs a DFS to detect cycles
 ## Getting started
 
 ```bash
+git clone https://github.com/LAMAgalletta0IQ/Holt-Graph.git
+cd Holt-Graph
 npm install
 npm run dev
 ```

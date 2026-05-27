@@ -264,6 +264,15 @@
   pointer-events: none;
 }
 
+.arrow-hit {
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.arrow-hit:hover + line {
+  stroke-width: 3;
+}
+
 .temp-line {
   stroke: var(--accent);
   stroke-width: 1.5;

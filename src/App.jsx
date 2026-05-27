@@ -158,6 +158,9 @@ export default function App() {
   const selectAddRef = useRef(false)
   const groupDragRef = useRef(null)
 
+  const selectedNodesRef = useRef(selectedNodes)
+  selectedNodesRef.current = selectedNodes
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -165,10 +168,18 @@ export default function App() {
         setConn({ active: false, from: null })
         setSelectedNodes(new Set())
       }
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return
+        const sel = selectedNodesRef.current
+        if (sel.size > 0) {
+          sel.forEach(id => deleteNode(id))
+          setSelectedNodes(new Set())
+        }
+      }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [deleteNode])
 
   const showToast = useCallback((msg, type = '') => {
     setToast({ msg, type, show: true })
@@ -329,6 +340,7 @@ export default function App() {
 
   const handleCanvasMouseDown = useCallback((e) => {
     if (e.target.closest('.g-node')) return
+    if (e.target.closest('.arrow-hit')) return
     if (mode !== 'none') {
       setConn({ active: false, from: null })
       return
@@ -488,16 +500,27 @@ export default function App() {
               if (!f || !t) return null
               const p1 = edgePt(f, t)
               const p2 = edgePt(t, f)
+              const color = a.type === 'assign' ? '#3fb950' : '#f85149'
               return (
-                <line
-                  key={a.id}
-                  x1={p1.x} y1={p1.y}
-                  x2={p2.x} y2={p2.y}
-                  stroke={a.type === 'assign' ? '#3fb950' : '#f85149'}
-                  strokeWidth="2"
-                  markerEnd={a.type === 'assign' ? 'url(#mk-assign)' : 'url(#mk-request)'}
-                  strokeLinecap="round"
-                />
+                <g key={a.id}>
+                  <line
+                    className="arrow-hit"
+                    x1={p1.x} y1={p1.y}
+                    x2={p2.x} y2={p2.y}
+                    stroke="transparent"
+                    strokeWidth="12"
+                    strokeLinecap="round"
+                    onClick={() => { deleteArrow(a.id); showToast('Arrow deleted', '') }}
+                  />
+                  <line
+                    x1={p1.x} y1={p1.y}
+                    x2={p2.x} y2={p2.y}
+                    stroke={color}
+                    strokeWidth="2"
+                    markerEnd={a.type === 'assign' ? 'url(#mk-assign)' : 'url(#mk-request)'}
+                    strokeLinecap="round"
+                  />
+                </g>
               )
             })}
           </g>
